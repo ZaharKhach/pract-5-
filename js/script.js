@@ -40,56 +40,70 @@ const adv = document.querySelectorAll('.promo__adv img'),
 
 // console.log(movies.firstElementChild);
 
-deletes.addEventListener('click', (event) => {
-    console.log('asdasd');
-})
 
-function addFilm() {
-    movieList.innerHTML = "";
-    movieDB.movies.forEach((film, i) => {
-        movieList.innerHTML += `<li class="promo__interactive-item">${i + 1} ${film}
+
+function addFilm(films, parent) {
+    parent.innerHTML = "";
+    films.forEach((film, i) => {
+        parent.innerHTML += `<li class="promo__interactive-item">${i + 1} ${film}
             <div class="delete"></div>
         </li>
-            `
+            `;
+        const deletee = document.querySelector('.delete');
+         deletee.addEventListener('click', () => {
+            deletee.parentElement.remove();
+        })
     })
 }
 
 
+const deleteAdv = (arr) => {
+    arr.forEach(element => {
+        element.remove();
+    });
+}
+
+function sortArr(arr) {
+    arr.sort();
+}
+
+const makeChanges = () => {
+    genre.textContent = 'драма';
+    poster.style.backgroundImage = 'url("../img/bg.jpg")';
+}
+
 form.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    if (checkbox) console.log("Добавляем любимый фильм");
-
+    if (checkbox.checked) {
+        console.log("Добавляем любимый фильм");
+    }
     ///sad
     // console.log(input.value.length);//3
     // console.log(input.value[0]);//d
-    if (input.value.length > 21) {
-        const input21 = input.value.slice([0], [21]) + "." + "." + ".";
-        movieList.innerHTML = '';
-        movieDB.movies.push(input21);
-        movieDB.movies.sort();
-        addFilm();
-    } else if (input.value.length < 21) {
-        movieList.innerHTML = '';
-        movieDB.movies.push(input.value);
-        movieDB.movies.sort();
-        addFilm();
+    if (input.value){
+        if (input.value.length > 21) {
+            const input21 = input.value.slice([0], [21]) + "." + "." + ".";
+            movieDB.movies.push(input21);
+            sortArr(movieDB.movies);
+            addFilm(movieDB.movies, movieList);
+        } else if (input.value.length < 21) {
+            movieDB.movies.push(input.value);
+            sortArr(movieDB.movies);
+            addFilm(movieDB.movies, movieList);
+        }
     }
     // console.log(input.value);
 
 
 })
 
-adv.forEach(element => {
-    element.remove();
-});
+deleteAdv(adv);
 
-genre.textContent = 'драма';
+makeChanges();
 
-poster.style.backgroundImage = 'url("../img/bg.jpg")';
+sortArr(movieDB.movies);
 
-
-movieDB.movies.sort();
-addFilm();
+addFilm(movieDB.movies, movieList);
 
 
